@@ -108,6 +108,21 @@ app.post('/posts', (req: Request, res: Response) => {
     res.status(201).send(newPost)
 })
 
+app.get('/posts/:postId', (req: Request, res: Response) => {
+    const id = +req.params.postId
+    const findPosts = posts.find(p => p.id === id)
+
+    if(isNaN(id)) {
+        res.sendStatus(400)
+    }
+
+    if(!findPosts) {
+        res.sendStatus(404)
+    } else {
+        res.status(200).send(findPosts)
+    }
+})
+
 
 app.use('/bloggers', BloggersRouter)
 

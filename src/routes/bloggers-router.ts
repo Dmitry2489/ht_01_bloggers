@@ -78,6 +78,8 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
     const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
+    const validYotodeURL = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
+    console.log(validYotodeURL)
 
     if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
         res.status(400).json({
