@@ -21,6 +21,17 @@ const bloggers = [
     }
 ]
 
+const posts = [
+    {
+        "id": 0,
+        "title": "string",
+        "shortDescription": "string",
+        "content": "string",
+        "bloggerId": 0,
+        "bloggerName": "string"
+    }
+]
+
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, Main page Bloggers!')
 })
@@ -46,7 +57,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
         return
     }
 
-    if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 100 ) {
+    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100 ) {
         res.status(400).json({
                 "errorsMessages": [
                     {
@@ -62,7 +73,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
     const newBlogger = {
         id: +(new Date()),
         name: nameBodyParams,
-        youtubeUrl: nameBodyParams
+        youtubeUrl: youtubeUrlBodyParams
     }
 
     bloggers.push(newBlogger)
@@ -70,6 +81,38 @@ app.post('/bloggers', (req: Request, res: Response) => {
     res.status(201).send(newBlogger)
 })
 
+app.get('/bloggers/:bloggerId', (req: Request, res: Response) => {
+    const id = +req.params.bloggerId
+    const fondBlogger = bloggers.find(b => b.id === id)
+
+    if(!fondBlogger) {
+        res.sendStatus(404)
+    } else {
+        res.status(200).send(fondBlogger)
+    }
+
+})
+
+app.delete('/bloggers/:id', (req: Request, res: Response) => {
+    const id = +req.params.id
+
+     const indexBlogger = bloggers.findIndex(b => b.id === id)
+
+    if (indexBlogger === -1){
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
+        return
+    } else  {
+        bloggers.splice(indexBlogger, 1)
+    }
+})
 
 
 // app.use('/videos', BloggersRouter)
