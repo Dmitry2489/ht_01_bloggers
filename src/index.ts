@@ -83,12 +83,56 @@ app.post('/bloggers', (req: Request, res: Response) => {
 
 app.get('/bloggers/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
-    const fondBlogger = bloggers.find(b => b.id === id)
+    const findBlogger = bloggers.find(b => b.id === id)
 
-    if(!fondBlogger) {
+    if(!findBlogger) {
         res.sendStatus(404)
     } else {
-        res.status(200).send(fondBlogger)
+        res.status(200).send(findBlogger)
+    }
+
+})
+
+app.put('/bloggers/:bloggerId', (req: Request, res: Response) => {
+    const id = +req.params.bloggerId
+    const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
+    const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
+
+    if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+        res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "Name is required",
+                        "field": "name"
+                    }
+                ]
+            }
+        )
+        return
+    }
+
+    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100 ) {
+        res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "youtubeUrl is required",
+                        "field": "youtubeUrl"
+                    }
+                ]
+            }
+        )
+        return
+    }
+
+    const indexBlogger = bloggers.findIndex(v => v.id === id)
+
+    if(indexBlogger === -1) {
+        res.sendStatus(404)
+    } else {
+        bloggers[indexBlogger].name = nameBodyParams
+        bloggers[indexBlogger].youtubeUrl = youtubeUrlBodyParams
+
+        res.status(204).send(bloggers[indexBlogger])
     }
 
 })
