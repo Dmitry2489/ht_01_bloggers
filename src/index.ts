@@ -7,13 +7,13 @@ app.use(bodyParser.json())
 
 const port = process.env.PORT || 5000
 
-// type BloggersType = {
-//     id: number,
-//     name: string,
-//     youtubeUrl: string
-// }
+type BloggersType = {
+    id: number,
+    name: string,
+    youtubeUrl: string
+}
 
-const bloggers = [
+const bloggers: Array<BloggersType> = [
     {
         id: 0,
         name: "Dima",
@@ -124,15 +124,17 @@ app.put('/bloggers/:bloggerId', (req: Request, res: Response) => {
         return
     }
 
-    const indexBlogger = bloggers.findIndex(v => v.id === id)
-
-    if(indexBlogger === -1) {
+    const indexBlogger = bloggers.find(b => b.id === id)
+    console.log(indexBlogger, 'indexBlogger')
+    if(!indexBlogger) {
         res.sendStatus(404)
     } else {
-        bloggers[indexBlogger].name = nameBodyParams
-        bloggers[indexBlogger].youtubeUrl = youtubeUrlBodyParams
+        indexBlogger.name = nameBodyParams
+        indexBlogger.youtubeUrl = youtubeUrlBodyParams
 
-        res.status(204).send(bloggers[indexBlogger])
+        // let updatedBlogger = indexBlogger
+
+        res.sendStatus(204)
     }
 
 })
@@ -155,6 +157,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
         return
     } else  {
         bloggers.splice(indexBlogger, 1)
+        res.sendStatus(201)
     }
 })
 
