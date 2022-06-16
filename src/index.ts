@@ -157,7 +157,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
         return
     } else  {
         bloggers.splice(indexBlogger, 1)
-        res.sendStatus(201)
+        res.sendStatus(204)
     }
 })
 
