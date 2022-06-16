@@ -40,6 +40,7 @@ app.post('/posts', (req: Request, res: Response) => {
     const shortDescriptionPost: string = req.body.shortDescription.trim()
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
+    const bloggerNamePost: string = req.body.bloggerName
 
     if (!titlePost || titlePost.length > 30) {
         res.status(400).json(
@@ -101,7 +102,8 @@ app.post('/posts', (req: Request, res: Response) => {
         title: titlePost,
         shortDescription: shortDescriptionPost,
         content: contentPost,
-        bloggerId: bloggerIdPost
+        bloggerId: bloggerIdPost,
+        bloggerName: bloggerNamePost
     }
 
     posts.push(<PostsType>newPost)
