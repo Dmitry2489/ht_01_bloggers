@@ -41,7 +41,7 @@ app.post('/posts', (req: Request, res: Response) => {
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
 
-    if (!titlePost) {
+    if (!titlePost || titlePost.length > 30) {
         res.status(400).json(
             {
                 "errorsMessages": [
@@ -52,19 +52,49 @@ app.post('/posts', (req: Request, res: Response) => {
                 ]
             }
         )
+        return;
     }
 
-    if (!shortDescriptionPost) {
+    if (!shortDescriptionPost || shortDescriptionPost.length > 100) {
         res.status(400).json(
             {
                 "errorsMessages": [
                     {
-                        "message": "Title is required",
-                        "field": "title"
+                        "message": "shortDescription is required",
+                        "field": "shortDescription"
                     }
                 ]
             }
         )
+        return;
+    }
+
+    if (!contentPost || contentPost.length > 1000) {
+        res.status(400).json(
+            {
+                "errorsMessages": [
+                    {
+                        "message": "contentPost is required",
+                        "field": "contentPost"
+                    }
+                ]
+            }
+        )
+        return;
+    }
+
+    if (!bloggerIdPost) {
+        res.status(400).json(
+            {
+                "errorsMessages": [
+                    {
+                        "message": "bloggerIdPost is required",
+                        "field": "bloggerIdPost"
+                    }
+                ]
+            }
+        )
+        return;
     }
 
     const newPost = {
@@ -75,7 +105,7 @@ app.post('/posts', (req: Request, res: Response) => {
     }
 
     posts.push(<PostsType>newPost)
-
+    res.status(201).send(newPost)
 })
 
 
