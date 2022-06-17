@@ -5,7 +5,6 @@ export const bloggersRepository = {
         return bloggers;
     },
     createBlogger(nameBodyParams: string, youtubeUrlBodyParams: string) {
-
         const newBlogger = {
             id: +(new Date()),
             name: nameBodyParams,
@@ -43,5 +42,4 @@ export const bloggersRepository = {
             return true;
         }
     }
-
 }

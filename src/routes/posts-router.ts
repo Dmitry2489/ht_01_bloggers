@@ -1,5 +1,6 @@
 import {Request, Response, Router} from "express";
 import {posts, PostsType} from "../model/Posts";
+import {bloggers} from "../model/Blogger";
 
 export const PostsRouter = Router({})
 
@@ -12,7 +13,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     const shortDescriptionPost: string = req.body.shortDescription.trim()
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
-    const bloggerNamePost: string = req.body.bloggerName
+    // const bloggerNamePost: string = req.body.bloggerName
 
     if (!titlePost || titlePost.length > 30) {
         res.status(400).json(
@@ -70,12 +71,28 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
+    const bloggerPost = bloggers.find(b => b.id === bloggerIdPost)
+    if(! bloggerPost) {
+        res.status(404).json(
+            {
+                "errorsMessages": [
+                    {
+                        "message": "Blogger is correct",
+                        "field": "bloggerId"
+                    }
+                ]
+            }
+        )
+        return;
+    }
+
     const newPost = {
+        id: bloggerPost.id,
         title: titlePost,
         shortDescription: shortDescriptionPost,
         content: contentPost,
         bloggerId: bloggerIdPost,
-        bloggerName: bloggerNamePost
+        bloggerName: bloggerPost.name
     }
 
     posts.push(<PostsType>newPost)
