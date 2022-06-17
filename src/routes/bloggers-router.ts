@@ -1,24 +1,13 @@
 import {Request, Response, Router} from "express";
+import {bloggers} from "../model/Blogger";
+import {bloggersRepository} from "../repositories/bloggers-repository";
 
 export const BloggersRouter = Router({})
 
-type BloggersType = {
-    id: number,
-    name: string,
-    youtubeUrl: string
-}
-
-const bloggers: Array<BloggersType> = [
-    {
-        id: 0,
-        name: "Dima",
-        youtubeUrl: "https://www.youtube.com/watch?v=Ru06hLoFcU0"
-    }
-]
-
 
 BloggersRouter.get('/', (req: Request, res: Response) => {
-    res.status(200).send(bloggers)
+    const allBloggers = bloggersRepository.allBloggers()
+    res.status(200).send(allBloggers)
 })
 
 BloggersRouter.post('/', (req: Request, res: Response) => {
@@ -51,20 +40,18 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
         return
     }
 
-    const newBlogger = {
-        id: +(new Date()),
-        name: nameBodyParams,
-        youtubeUrl: youtubeUrlBodyParams
-    }
-
-    bloggers.push(newBlogger)
-
+    const newBlogger = bloggersRepository.createBlogger(nameBodyParams, youtubeUrlBodyParams)
     res.status(201).send(newBlogger)
 })
 
 BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
-    const findBlogger = bloggers.find(b => b.id === id)
+
+    if(isNaN(id)) {
+        res.sendStatus(404)
+    }
+
+    const findBlogger = bloggersRepository.findByIdBlogger(id)
 
     if(!findBlogger) {
         res.sendStatus(404)
@@ -79,7 +66,11 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
     const validYotodeURL = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
-    console.log(validYotodeURL)
+    // console.log(validYotodeURL)
+
+    if(isNaN(id)) {
+        res.sendStatus(404)
+    }
 
     if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
         res.status(400).json({
@@ -107,16 +98,11 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         return
     }
 
-    const indexBlogger = bloggers.find(b => b.id === id)
-    console.log(indexBlogger, 'indexBlogger')
+    const indexBlogger = bloggersRepository.updateBlogger(id, nameBodyParams, youtubeUrlBodyParams)
+
     if(!indexBlogger) {
         res.sendStatus(404)
     } else {
-        indexBlogger.name = nameBodyParams
-        indexBlogger.youtubeUrl = youtubeUrlBodyParams
-
-        // let updatedBlogger = indexBlogger
-
         res.sendStatus(204)
     }
 
@@ -125,9 +111,13 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
 BloggersRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
-    const indexBlogger = bloggers.findIndex(b => b.id === id)
+    if(isNaN(id)) {
+        res.sendStatus(404)
+    }
 
-    if (indexBlogger === -1){
+    const indexBlogger = bloggersRepository.deleteBlogger(id)
+
+    if (!indexBlogger){
         res.status(404).json({
                 "errorsMessages": [
                     {
@@ -137,9 +127,8 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
                 ]
             }
         )
-        return
+        return;
     } else  {
-        bloggers.splice(indexBlogger, 1)
         res.sendStatus(204)
     }
 })
