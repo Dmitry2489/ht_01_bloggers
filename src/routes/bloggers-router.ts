@@ -1,5 +1,4 @@
 import {Request, Response, Router} from "express";
-import {bloggers} from "../model/Blogger";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 
 export const BloggersRouter = Router({})
