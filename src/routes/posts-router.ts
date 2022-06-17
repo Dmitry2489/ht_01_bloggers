@@ -13,7 +13,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     const shortDescriptionPost: string = req.body.shortDescription.trim()
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
-    // const bloggerNamePost: string = req.body.bloggerName
 
     if (!titlePost || titlePost.length > 30) {
         res.status(400).json(
@@ -57,7 +56,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    if (!bloggerIdPost) {
+    if (!bloggerIdPost || isNaN(bloggerIdPost)) {
         res.status(400).json(
             {
                 "errorsMessages": [
@@ -72,7 +71,8 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     const bloggerPost = bloggers.find(b => b.id === bloggerIdPost)
-    if(! bloggerPost) {
+
+    if(!bloggerPost) {
         res.status(404).json(
             {
                 "errorsMessages": [
@@ -87,7 +87,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     const newPost = {
-        id: bloggerPost.id,
+        id: +(new Date()),
         title: titlePost,
         shortDescription: shortDescriptionPost,
         content: contentPost,
@@ -110,6 +110,30 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
     if(!findPosts) {
         res.sendStatus(404)
     } else {
+        res.status(200).send(findPosts)
+    }
+})
+
+PostsRouter.put('/:postId', (req: Request, res: Response) => {
+    const id = +req.params.postId
+    const titleUpdate = req.body.title
+    const shortDescriptionUpdate = req.body.shortDescription
+    const contentUpdate = req.body.content
+    const bloggerId = req.body.bloggerId
+
+    const findPosts = posts.find(p => p.id === id)
+
+    if(isNaN(id)) {
+        res.sendStatus(400)
+    }
+
+    if(!findPosts) {
+        res.sendStatus(404)
+    } else {
+        findPosts.title = titleUpdate
+        findPosts.shortDescription = shortDescriptionUpdate
+        findPosts.content = contentUpdate
+        findPosts.bloggerId = bloggerId
         res.status(200).send(findPosts)
     }
 })
