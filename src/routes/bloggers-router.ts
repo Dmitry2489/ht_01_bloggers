@@ -97,7 +97,6 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     let validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
 
     let errors = []
-    // console.log('')
 
     if (!nameBodyParams || nameBodyParams === null) {
         errors.push(
@@ -108,14 +107,14 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         )
     }
 
-    // if (nameBodyParams.length > 15 || nameBodyParams.length < 2) {
-    //     errors.push(
-    //         {
-    //             "message": "Title length should be from 3 to 40 symbols",
-    //             "field": "title"
-    //         }
-    //     )
-    // }
+    if (nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+        errors.push(
+            {
+                "message": "Title length should be from 3 to 40 symbols",
+                "field": "title"
+            }
+        )
+    }
 
     if (!youtubeUrlBodyParams) {
         errors.push(
