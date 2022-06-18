@@ -94,8 +94,64 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
     const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
-    const validYotodeURL = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
-    // console.log(validYotodeURL)
+    let validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
+
+    let errors = []
+    // console.log('')
+
+    if (!nameBodyParams || nameBodyParams === null) {
+        errors.push(
+            {
+                "message": "Name is required",
+                "field": "Name"
+            }
+        )
+    }
+
+    // if (nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+    //     errors.push(
+    //         {
+    //             "message": "Title length should be from 3 to 40 symbols",
+    //             "field": "title"
+    //         }
+    //     )
+    // }
+
+    if (!youtubeUrlBodyParams) {
+        errors.push(
+            {
+                "message": "youtubeUrl is required",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if (validYoutubeUrl.length > 1) {
+        errors.push(
+            {
+                "message": "youtubeUrl should ^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if (youtubeUrlBodyParams.length > 100 ) {
+        errors.push(
+            {
+                "message": "youtubeUrl length should more than 100 characters",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if(errors.length >= 1) {
+        res.status(400).json(
+            {
+                "errorsMessages": errors
+            }
+        )
+        return;
+    }
 
     if(isNaN(id)) {
         res.sendStatus(404)
