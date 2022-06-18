@@ -1,6 +1,8 @@
 import {Request, Response, Router} from "express";
 import {posts, PostsType} from "../model/Posts";
 import {bloggers} from "../model/Blogger";
+import {bloggersRepository} from "../repositories/bloggers-repository";
+import {BloggersRouter} from "./bloggers-router";
 
 export const PostsRouter = Router({})
 
@@ -19,8 +21,8 @@ PostsRouter.post('/', (req: Request, res: Response) => {
             {
                 "errorsMessages": [
                     {
-                        "message": "Title is required",
-                        "field": "title"
+                    "message": "Title is required",
+                    "field": "title"
                     }
                 ]
             }
@@ -70,14 +72,14 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    const bloggerPost = bloggers.find(b => b.id === bloggerIdPost)
+    const  findBlogger = bloggers.find(b => b.id === bloggerIdPost)
 
-    if(!bloggerPost) {
-        res.status(404).json(
+    if(!findBlogger) {
+        res.status(401).json(
             {
                 "errorsMessages": [
                     {
-                        "message": "Blogger is correct",
+                        "message": "Blogger is unauthorized",
                         "field": "bloggerId"
                     }
                 ]
@@ -92,7 +94,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         shortDescription: shortDescriptionPost,
         content: contentPost,
         bloggerId: bloggerIdPost,
-        bloggerName: bloggerPost.name
+        bloggerName: findBlogger.name
     }
 
     posts.push(<PostsType>newPost)
@@ -121,11 +123,30 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     const contentUpdate = req.body.content
     const bloggerId = req.body.bloggerId
 
-    const findPosts = posts.find(p => p.id === id)
-
     if(isNaN(id)) {
         res.sendStatus(400)
     }
+
+
+    const findPosts = posts.find(p => p.id === id)
+    console.log(bloggers)
+
+    const findBlogger = bloggers.find(b => b.id === bloggerId)
+
+    console.log(findPosts)
+    // console.log(findBlogger)
+
+    // if(!findBlogger) {
+    //     res.status(401).json({
+    //         "errorsMessages": [
+    //             {
+    //                 "message": "Blogger is unauthorized",
+    //                 "field": "bloggerId"
+    //             }
+    //         ]
+    //     })
+    //     return;
+    // }
 
     if(!findPosts) {
         res.sendStatus(404)
@@ -135,5 +156,32 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
         findPosts.content = contentUpdate
         findPosts.bloggerId = bloggerId
         res.status(200).send(findPosts)
+    }
+})
+
+PostsRouter.delete('/:id', (req: Request, res: Response) => {
+    const id = +req.params.id
+
+    if(isNaN(id)) {
+        res.sendStatus(404)
+    }
+
+    // const indexBlogger = bloggersRepository.deleteBlogger(id)
+
+    const indexPost = posts.findIndex(p => p.id === id)
+
+    if (!indexPost){
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
+        return;
+    } else  {
+        res.sendStatus(204)
     }
 })

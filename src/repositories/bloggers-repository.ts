@@ -21,13 +21,13 @@ export const bloggersRepository = {
         return findBlogger;
     },
     updateBlogger(id: number, nameBodyParams: string,  youtubeUrlBodyParams: string) {
-        const indexBlogger = bloggers.find(b => b.id === id)
+        const findBlogger = bloggers.find(b => b.id === id)
 
-        if(!indexBlogger) {
+        if(!findBlogger) {
             return false;
         } else {
-            indexBlogger.name = nameBodyParams
-            indexBlogger.youtubeUrl = youtubeUrlBodyParams
+            findBlogger.name = nameBodyParams
+            findBlogger.youtubeUrl = youtubeUrlBodyParams
 
             return true;
         }
