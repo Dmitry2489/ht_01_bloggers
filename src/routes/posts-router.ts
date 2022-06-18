@@ -1,8 +1,7 @@
 import {Request, Response, Router} from "express";
 import {posts, PostsType} from "../model/Posts";
 import {bloggers} from "../model/Blogger";
-import {bloggersRepository} from "../repositories/bloggers-repository";
-import {BloggersRouter} from "./bloggers-router";
+
 
 export const PostsRouter = Router({})
 
@@ -16,12 +15,151 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
 
+    let errors = []
 
+    if (!titlePost) {
+        // res.status(400).json(
+        //     {
+        //         "errorsMessages": [
+        //             {
+        //             "message": "Title is required",
+        //             "field": "title"
+        //             }
+        //         ]
+        //     }
+        // )
+        // return;
+
+        errors.push(
+            {
+                "message": "Title is required",
+                "field": "title"
+            }
+        )
+    }
+
+    if (titlePost.length > 30) {
+        // res.status(400).json(
+        //     {
+        //         "errorsMessages": [
+        //             {
+        //                 "message": "Title is required",
+        //                 "field": "title"
+        //             }
+        //         ]
+        //     }
+        // )
+        // return;
+
+        errors.push(
+            {
+                "message": "Title length more than 30 characters",
+                "field": "title"
+            }
+        )
+    }
+
+    if (!shortDescriptionPost) {
+
+
+        errors.push(
+            {
+                "message": "shortDescription is required",
+                "field": "shortDescription"
+            }
+        )
+    }
+
+    if (shortDescriptionPost.length > 100) {
+        // res.status(400).json(
+        //     {
+        //         "errorsMessages": [
+        //             {
+        //                 "message": "shortDescription length more than 30 characters",
+        //                 "field": "shortDescription"
+        //             }
+        //         ]
+        //     }
+        // )
+        // return;
+
+        errors.push(
+            {
+                "message": "shortDescription length more than 100 characters",
+                "field": "shortDescription"
+            }
+        )
+    }
+
+    if (!contentPost) {
+        // res.status(400).json(
+        //     {
+        //         "errorsMessages": [
+        //             {
+        //                 "message": "contentPost is required",
+        //                 "field": "contentPost"
+        //             }
+        //         ]
+        //     }
+        // )
+        // return;
+
+        errors.push(
+            {
+                "message": "contentPost is required",
+                "field": "contentPost"
+            }
+        )
+    }
+
+    if (contentPost.length > 1000) {
+        // res.status(400).json(
+        //     {
+        //         "errorsMessages": [
+        //             {
+        //                 "message": "contentPost length more than 100 characters",
+        //                 "field": "contentPost"
+        //             }
+        //         ]
+        //     }
+        // )
+        // return;
+
+        errors.push(
+            {
+                "message": "contentPost length more than 100 characters",
+                "field": "contentPost"
+            }
+        )
+    }
+
+    if(errors.length >= 1) {
+        res.status(400).json(
+            {
+                "errorsMessages": errors
+            }
+        )
+        return;
+    }
+
+    if (!bloggerIdPost || isNaN(bloggerIdPost)) {
+        res.status(400).json(
+            {
+                "errorsMessages": [
+                    {
+                        "message": "bloggerIdPost is required",
+                        "field": "bloggerIdPost"
+                    }
+                ]
+            }
+        )
+        return;
+    }
 
     const  findBlogger = bloggers.find(b => b.id === bloggerIdPost)
 
     if(!findBlogger) {
-        res.status(401).json(
+        res.status(400).json(
             {
                 "errorsMessages": [
                     {
@@ -77,7 +215,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     const findPosts = posts.find(p => p.id === id)
     console.log(bloggers)
 
-    const findBlogger = bloggers.find(b => b.id === bloggerId)
+    // const findBlogger = bloggers.find(b => b.id === bloggerId)
 
     console.log(findPosts)
     // console.log(findBlogger)
@@ -101,7 +239,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
         findPosts.shortDescription = shortDescriptionUpdate
         findPosts.content = contentUpdate
         findPosts.bloggerId = bloggerId
-        res.status(200).send(findPosts)
+        res.status(204)
     }
 })
 

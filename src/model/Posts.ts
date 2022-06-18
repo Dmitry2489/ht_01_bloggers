@@ -4,7 +4,7 @@ export type PostsType = {
     shortDescription: "string",
     content: "string",
     bloggerId: number,
-    bloggerName?: "string"
+    bloggerName: "string"
 }
 
 export const posts: Array<PostsType> = [
