@@ -16,61 +16,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
 
-    if (!titlePost || titlePost.length > 30) {
-        res.status(400).json(
-            {
-                "errorsMessages": [
-                    {
-                    "message": "Title is required",
-                    "field": "title"
-                    }
-                ]
-            }
-        )
-        return;
-    }
 
-    if (!shortDescriptionPost || shortDescriptionPost.length > 100) {
-        res.status(400).json(
-            {
-                "errorsMessages": [
-                    {
-                        "message": "shortDescription is required",
-                        "field": "shortDescription"
-                    }
-                ]
-            }
-        )
-        return;
-    }
-
-    if (!contentPost || contentPost.length > 1000) {
-        res.status(400).json(
-            {
-                "errorsMessages": [
-                    {
-                        "message": "contentPost is required",
-                        "field": "contentPost"
-                    }
-                ]
-            }
-        )
-        return;
-    }
-
-    if (!bloggerIdPost || isNaN(bloggerIdPost)) {
-        res.status(400).json(
-            {
-                "errorsMessages": [
-                    {
-                        "message": "bloggerIdPost is required",
-                        "field": "bloggerIdPost"
-                    }
-                ]
-            }
-        )
-        return;
-    }
 
     const  findBlogger = bloggers.find(b => b.id === bloggerIdPost)
 
