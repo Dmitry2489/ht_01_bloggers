@@ -14,22 +14,9 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     const shortDescriptionPost: string = req.body.shortDescription.trim()
     const contentPost: string = req.body.content.trim()
     const bloggerIdPost: number = +req.body.bloggerId
-
     let errors = []
 
     if (!titlePost) {
-        // res.status(400).json(
-        //     {
-        //         "errorsMessages": [
-        //             {
-        //             "message": "Title is required",
-        //             "field": "title"
-        //             }
-        //         ]
-        //     }
-        // )
-        // return;
-
         errors.push(
             {
                 "message": "Title is required",
@@ -39,18 +26,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     if (titlePost.length > 30) {
-        // res.status(400).json(
-        //     {
-        //         "errorsMessages": [
-        //             {
-        //                 "message": "Title is required",
-        //                 "field": "title"
-        //             }
-        //         ]
-        //     }
-        // )
-        // return;
-
         errors.push(
             {
                 "message": "Title length more than 30 characters",
@@ -71,18 +46,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     if (shortDescriptionPost.length > 100) {
-        // res.status(400).json(
-        //     {
-        //         "errorsMessages": [
-        //             {
-        //                 "message": "shortDescription length more than 30 characters",
-        //                 "field": "shortDescription"
-        //             }
-        //         ]
-        //     }
-        // )
-        // return;
-
         errors.push(
             {
                 "message": "shortDescription length more than 100 characters",
@@ -92,18 +55,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     if (!contentPost) {
-        // res.status(400).json(
-        //     {
-        //         "errorsMessages": [
-        //             {
-        //                 "message": "contentPost is required",
-        //                 "field": "contentPost"
-        //             }
-        //         ]
-        //     }
-        // )
-        // return;
-
         errors.push(
             {
                 "message": "contentPost is required",
@@ -113,18 +64,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     if (contentPost.length > 1000) {
-        // res.status(400).json(
-        //     {
-        //         "errorsMessages": [
-        //             {
-        //                 "message": "contentPost length more than 100 characters",
-        //                 "field": "contentPost"
-        //             }
-        //         ]
-        //     }
-        // )
-        // return;
-
         errors.push(
             {
                 "message": "contentPost length more than 100 characters",
@@ -163,7 +102,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
             {
                 "errorsMessages": [
                     {
-                        "message": "Blogger is unauthorized",
+                        "message": "Blogger id is required",
                         "field": "bloggerId"
                     }
                 ]
@@ -206,6 +145,64 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     const shortDescriptionUpdate = req.body.shortDescription
     const contentUpdate = req.body.content
     const bloggerId = req.body.bloggerId
+
+    let errors = []
+
+    if (!titleUpdate) {
+        errors.push(
+            {
+                "message": "Title is required",
+                "field": "title"
+            }
+        )
+    }
+
+    if (shortDescriptionUpdate.length > 30) {
+        errors.push(
+            {
+                "message": "Title length more than 30 characters",
+                "field": "title"
+            }
+        )
+    }
+
+    if (!shortDescriptionUpdate) {
+
+
+        errors.push(
+            {
+                "message": "shortDescription is required",
+                "field": "shortDescription"
+            }
+        )
+    }
+
+    if (!contentUpdate) {
+        errors.push(
+            {
+                "message": "contentPost is required",
+                "field": "contentPost"
+            }
+        )
+    }
+
+    if (contentUpdate.length > 1000) {
+        errors.push(
+            {
+                "message": "contentPost length more than 100 characters",
+                "field": "contentPost"
+            }
+        )
+    }
+
+    if(errors.length >= 1) {
+        res.status(400).json(
+            {
+                "errorsMessages": errors
+            }
+        )
+        return;
+    }
 
     if(isNaN(id)) {
         res.sendStatus(400)
