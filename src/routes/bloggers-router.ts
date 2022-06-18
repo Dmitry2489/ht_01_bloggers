@@ -12,32 +12,61 @@ BloggersRouter.get('/', (req: Request, res: Response) => {
 BloggersRouter.post('/', (req: Request, res: Response) => {
     const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
-    let errorsArray = {}
+    const validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
+    let errors = []
 
-    if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
-        res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "Name is required",
-                        "field": "name"
-                    }
-                ]
+    if (!nameBodyParams || nameBodyParams === null) {
+        errors.push(
+            {
+                "message": "Name is required",
+                "field": "Name"
             }
         )
-        return
     }
 
-    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100 ) {
-        res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "youtubeUrl is required",
-                        "field": "youtubeUrl"
-                    }
-                ]
+    if (nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+        errors.push(
+            {
+                "message": "Title length should be from 3 to 40 symbols",
+                "field": "title"
             }
         )
-        return
+    }
+
+    if (!youtubeUrlBodyParams) {
+        errors.push(
+            {
+                "message": "youtubeUrl is required",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if (validYoutubeUrl.length > 1) {
+        errors.push(
+            {
+                "message": "youtubeUrl should ^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if (youtubeUrlBodyParams.length > 100 ) {
+        errors.push(
+            {
+                "message": "youtubeUrl length should more than 100 characters",
+                "field": "youtubeUrl"
+            }
+        )
+    }
+
+    if(errors.length >= 1) {
+        res.status(400).json(
+            {
+                "errorsMessages": errors
+            }
+        )
+        return;
     }
 
     const newBlogger = bloggersRepository.createBlogger(nameBodyParams, youtubeUrlBodyParams)

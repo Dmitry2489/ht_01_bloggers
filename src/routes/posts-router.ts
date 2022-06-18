@@ -208,13 +208,12 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
         res.sendStatus(400)
     }
 
-
     const findPosts = posts.find(p => p.id === id)
-    console.log(bloggers)
+    // console.log(bloggers)
 
     // const findBlogger = bloggers.find(b => b.id === bloggerId)
 
-    console.log(findPosts)
+    // console.log(findPosts)
     // console.log(findBlogger)
 
     // if(!findBlogger) {
