@@ -129,11 +129,11 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
     const findPosts = posts.find(p => p.id === id)
 
     if(isNaN(id)) {
-        res.sendStatus(400)
+        res.status(400)
     }
 
     if(!findPosts) {
-        res.sendStatus(404)
+        res.status(404)
     } else {
         res.status(200).send(findPosts)
     }
@@ -205,7 +205,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     }
 
     if(isNaN(id)) {
-        res.sendStatus(400)
+        res.status(400)
     }
 
     const findPosts = posts.find(p => p.id === id)
@@ -229,7 +229,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     // }
 
     if(!findPosts) {
-        res.sendStatus(404)
+        res.status(404)
     } else {
         findPosts.title = titleUpdate
         findPosts.shortDescription = shortDescriptionUpdate
@@ -243,7 +243,7 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     if(isNaN(id)) {
-        res.sendStatus(404)
+        res.status(404)
     }
 
     // const indexBlogger = bloggersRepository.deleteBlogger(id)
@@ -262,6 +262,6 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
         )
         return;
     } else  {
-        res.sendStatus(204)
+        res.status(204)
     }
 })
