@@ -44,6 +44,8 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
         )
     }
 
+
+
     if (validYoutubeUrl.length < 1) {
         errors.push(
             {
@@ -79,13 +81,13 @@ BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
 
     if(isNaN(id)) {
-        res.sendStatus(404)
+        res.status(404)
     }
 
     const findBlogger = bloggersRepository.findByIdBlogger(id)
 
     if(!findBlogger) {
-        res.sendStatus(404)
+        res.status(404)
     } else {
         res.status(200).send(findBlogger)
     }
@@ -157,7 +159,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     }
 
     if(isNaN(id)) {
-        res.sendStatus(404)
+        res.status(404)
     }
 
     if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
@@ -189,7 +191,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     const indexBlogger = bloggersRepository.updateBlogger(id, nameBodyParams, youtubeUrlBodyParams)
 
     if(!indexBlogger) {
-        res.sendStatus(404)
+        res.status(404)
     } else {
         res.sendStatus(204)
     }
@@ -200,7 +202,7 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     if(isNaN(id)) {
-        res.sendStatus(404)
+        res.status(404)
     }
 
     const indexBlogger = bloggersRepository.deleteBlogger(id)
@@ -217,6 +219,6 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
         )
         return;
     } else  {
-        res.sendStatus(204)
+        res.status(204)
     }
 })
