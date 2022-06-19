@@ -15,7 +15,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
     const validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
     let errors = []
 
-    res.send(validYoutubeUrl)
+    // res.send(validYoutubeUrl)
 
     if (!nameBodyParams || nameBodyParams === null) {
         errors.push(
