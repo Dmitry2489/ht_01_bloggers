@@ -122,6 +122,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
 
     posts.push(<PostsType>newPost)
     res.status(201).send(newPost)
+    return;
 })
 
 PostsRouter.get('/:postId', (req: Request, res: Response) => {
@@ -130,12 +131,15 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(400)
+        return;
     }
 
     if(!findPosts) {
         res.status(404)
+        return;
     } else {
         res.status(200).send(findPosts)
+        return;
     }
 })
 
@@ -206,6 +210,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(400)
+        return;
     }
 
     const findPosts = posts.find(p => p.id === id)
@@ -230,12 +235,14 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
 
     if(!findPosts) {
         res.status(404)
+        return;
     } else {
         findPosts.title = titleUpdate
         findPosts.shortDescription = shortDescriptionUpdate
         findPosts.content = contentUpdate
         findPosts.bloggerId = bloggerId
         res.status(204)
+        return;
     }
 })
 
@@ -244,6 +251,7 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(404)
+        return;
     }
 
     // const indexBlogger = bloggersRepository.deleteBlogger(id)
@@ -263,5 +271,6 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
         return;
     } else  {
         res.status(204)
+        return;
     }
 })

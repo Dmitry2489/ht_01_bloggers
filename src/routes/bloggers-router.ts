@@ -15,8 +15,6 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
     const validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
     let errors = []
 
-    // res.send(validYoutubeUrl)
-
     if (!nameBodyParams || nameBodyParams === null) {
         errors.push(
             {
@@ -75,6 +73,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
 
     const newBlogger = bloggersRepository.createBlogger(nameBodyParams, youtubeUrlBodyParams)
     res.status(201).send(newBlogger)
+    return;
 })
 
 BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
@@ -82,14 +81,17 @@ BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(404)
+        return;
     }
 
     const findBlogger = bloggersRepository.findByIdBlogger(id)
 
     if(!findBlogger) {
         res.status(404)
+        return;
     } else {
         res.status(200).send(findBlogger)
+        return;
     }
 
 })
@@ -159,6 +161,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(404)
+        return;
     }
 
     if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
@@ -202,6 +205,7 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
 
     if(isNaN(id)) {
         res.status(404)
+        return;
     }
 
     const indexBlogger = bloggersRepository.deleteBlogger(id)
@@ -219,5 +223,6 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
         return;
     } else  {
         res.status(204)
+        return;
     }
 })
