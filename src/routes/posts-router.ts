@@ -269,7 +269,7 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
 
     // const indexBlogger = bloggersRepository.deleteBlogger(id)
 
-    const indexPost = posts.findIndex(p => p.id === id)
+    const indexPost: number = posts.findIndex(p => p.id === id)
 
 
     if (indexPost === -1){
