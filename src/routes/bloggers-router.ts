@@ -99,7 +99,8 @@ BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
         res.sendStatus(404)
         return;
     } else {
-        res.sendStatus(200).send(findBlogger)
+        res.status(200).send(findBlogger)
+        // res.status(200).send('Success 1')
         return;
     }
 
