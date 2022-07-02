@@ -182,36 +182,36 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         return;
     }
 
-    if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
-        res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "Name is required",
-                        "field": "name"
-                    }
-                ]
-            }
-        )
-        return
-    }
-
-    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100) {
-        res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "youtubeUrl is required",
-                        "field": "youtubeUrl"
-                    }
-                ]
-            }
-        )
-        return
-    }
+    // if (!nameBodyParams || nameBodyParams === null && nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+    //     res.status(400).json({
+    //             "errorsMessages": [
+    //                 {
+    //                     "message": "Name is required",
+    //                     "field": "name"
+    //                 }
+    //             ]
+    //         }
+    //     )
+    //     return
+    // }
+    //
+    // if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100) {
+    //     res.status(400).json({
+    //             "errorsMessages": [
+    //                 {
+    //                     "message": "youtubeUrl is required",
+    //                     "field": "youtubeUrl"
+    //                 }
+    //             ]
+    //         }
+    //     )
+    //     return
+    // }
 
     const indexBlogger = bloggersRepository.updateBlogger(id, nameBodyParams, youtubeUrlBodyParams)
 
     if (!indexBlogger) {
-        res.status(404)
+        res.sendStatus(404)
     } else {
         res.sendStatus(204)
     }

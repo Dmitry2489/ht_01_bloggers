@@ -35,8 +35,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
     }
 
     if (!shortDescriptionPost) {
-
-
         errors.push(
             {
                 "message": "shortDescription is required",
@@ -143,7 +141,7 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
     }
 
     if(!findPosts) {
-        res.status(404)
+        res.sendStatus(404)
         return;
     } else {
         res.status(200).send(findPosts)
@@ -217,7 +215,15 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     }
 
     if(isNaN(id)) {
-        res.status(400)
+        res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
         return;
     }
 
@@ -242,14 +248,13 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
     // }
 
     if(!findPosts) {
-        res.status(404)
-        return;
+        res.sendStatus(404)
     } else {
         findPosts.title = titleUpdate
         findPosts.shortDescription = shortDescriptionUpdate
         findPosts.content = contentUpdate
         findPosts.bloggerId = bloggerId
-        res.status(204)
+        res.sendStatus(204)
         return;
     }
 })
@@ -258,8 +263,7 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     if(isNaN(id)) {
-        res.status(404)
-        return;
+        res.sendStatus(404)
     }
 
     // const indexBlogger = bloggersRepository.deleteBlogger(id)
@@ -278,7 +282,6 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
         )
         return;
     } else  {
-        res.status(204)
-        return;
+        res.sendStatus(204)
     }
 })
