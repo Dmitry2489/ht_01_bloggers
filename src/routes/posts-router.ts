@@ -261,6 +261,7 @@ PostsRouter.put('/:postId', (req: Request, res: Response) => {
 
 PostsRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
+    console.log(id)
 
     if(isNaN(id)) {
         res.sendStatus(404)
@@ -270,7 +271,9 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
 
     const indexPost = posts.findIndex(p => p.id === id)
 
-    if (!indexPost){
+    console.log("jfdjflkjd",  indexPost)
+
+    if (indexPost === -1){
         res.status(404).json({
                 "errorsMessages": [
                     {
