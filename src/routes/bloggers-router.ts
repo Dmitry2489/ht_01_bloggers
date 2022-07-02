@@ -43,7 +43,6 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
     }
 
 
-
     if (validYoutubeUrl.length < 1) {
         errors.push(
             {
@@ -53,7 +52,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
         )
     }
 
-    if (youtubeUrlBodyParams.length > 100 ) {
+    if (youtubeUrlBodyParams.length > 100) {
         errors.push(
             {
                 "message": "youtubeUrl length should more than 100 characters",
@@ -62,7 +61,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
         )
     }
 
-    if(errors.length >= 1) {
+    if (errors.length >= 1) {
         res.status(400).json(
             {
                 "errorsMessages": errors
@@ -79,14 +78,14 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
 BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
 
-    if(isNaN(id)) {
+    if (isNaN(id)) {
         res.status(404)
         return;
     }
 
     const findBlogger = bloggersRepository.findByIdBlogger(id)
 
-    if(!findBlogger) {
+    if (!findBlogger) {
         res.status(404)
         return;
     } else {
@@ -141,7 +140,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         )
     }
 
-    if (youtubeUrlBodyParams.length > 100 ) {
+    if (youtubeUrlBodyParams.length > 100) {
         errors.push(
             {
                 "message": "youtubeUrl length should more than 100 characters",
@@ -150,7 +149,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         )
     }
 
-    if(errors.length >= 1) {
+    if (errors.length >= 1) {
         res.status(400).json(
             {
                 "errorsMessages": errors
@@ -159,7 +158,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         return;
     }
 
-    if(isNaN(id)) {
+    if (isNaN(id)) {
         res.status(404)
         return;
     }
@@ -177,7 +176,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
         return
     }
 
-    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100 ) {
+    if (!youtubeUrlBodyParams || youtubeUrlBodyParams === null && youtubeUrlBodyParams.length > 100) {
         res.status(400).json({
                 "errorsMessages": [
                     {
@@ -192,7 +191,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
 
     const indexBlogger = bloggersRepository.updateBlogger(id, nameBodyParams, youtubeUrlBodyParams)
 
-    if(!indexBlogger) {
+    if (!indexBlogger) {
         res.status(404)
     } else {
         res.sendStatus(204)
@@ -203,14 +202,14 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
 BloggersRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
-    if(isNaN(id)) {
+    if (isNaN(id)) {
         res.status(404)
         return;
     }
 
     const indexBlogger = bloggersRepository.deleteBlogger(id)
 
-    if (!indexBlogger){
+    if (!indexBlogger) {
         res.status(404).json({
                 "errorsMessages": [
                     {
@@ -221,8 +220,8 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
             }
         )
         return;
-    } else  {
-        res.status(204)
+    } else {
+        res.sendStatus(204)
         return;
     }
 })

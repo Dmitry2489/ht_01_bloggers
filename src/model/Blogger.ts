@@ -6,8 +6,8 @@ export type BloggersType = {
 
  export const bloggers: Array<BloggersType> = [
     {
-        id: 0,
+        id: 1,
         name: "Dima",
-        youtubeUrl: "https://www.youtube.com/watch?v=Ru06hLoFcU0"
+        youtubeUrl: "https://www.youtube.com/watch?v=Ru06hLoFcU0",
     }
 ]
