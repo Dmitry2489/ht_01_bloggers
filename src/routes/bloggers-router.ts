@@ -1,5 +1,7 @@
 import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
+import {BloggersType} from "../model/Blogger";
+import {errorsType} from "../types/types";
 
 export const BloggersRouter = Router({})
 
@@ -13,7 +15,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
     const nameBodyParams = req.body.name != null ? req.body.name.trim() : null
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
     const validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
-    let errors = []
+    let errors: Array<errorsType> = []
 
     if (!nameBodyParams || nameBodyParams === null) {
         errors.push(
@@ -79,7 +81,15 @@ BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
     const id = +req.params.bloggerId
 
     if (isNaN(id)) {
-        res.status(404)
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
         return;
     }
 
@@ -101,7 +111,7 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     const youtubeUrlBodyParams = req.body.youtubeUrl != null ? req.body.youtubeUrl.trim() : null
     let validYoutubeUrl = youtubeUrlBodyParams?.match('^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
 
-    let errors = []
+    let errors: Array<errorsType> = []
 
 
     if (!nameBodyParams || nameBodyParams === null) {
@@ -159,7 +169,15 @@ BloggersRouter.put('/:bloggerId', (req: Request, res: Response) => {
     }
 
     if (isNaN(id)) {
-        res.status(404)
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "Name is required",
+                        "field": "name"
+                    }
+                ]
+            }
+        )
         return;
     }
 
