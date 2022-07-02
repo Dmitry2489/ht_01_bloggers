@@ -130,7 +130,15 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
     const findPosts = posts.find(p => p.id === id)
 
     if(isNaN(id)) {
-        res.status(400)
+        res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
         return;
     }
 
