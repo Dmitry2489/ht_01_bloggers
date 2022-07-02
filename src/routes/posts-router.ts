@@ -271,7 +271,6 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
 
     const indexPost = posts.findIndex(p => p.id === id)
 
-    console.log("jfdjflkjd",  indexPost)
 
     if (indexPost === -1){
         res.status(404).json({
@@ -285,6 +284,7 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
         )
         return;
     } else  {
+        posts.splice(indexPost, 1)
         res.sendStatus(204)
     }
 })
