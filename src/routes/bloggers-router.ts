@@ -86,10 +86,10 @@ BloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
     const findBlogger = bloggersRepository.findByIdBlogger(id)
 
     if (!findBlogger) {
-        res.status(404)
+        res.sendStatus(404)
         return;
     } else {
-        res.status(200).send(findBlogger)
+        res.sendStatus(200).send(findBlogger)
         return;
     }
 
@@ -203,7 +203,15 @@ BloggersRouter.delete('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     if (isNaN(id)) {
-        res.status(404)
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
         return;
     }
 
