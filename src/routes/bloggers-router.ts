@@ -1,6 +1,5 @@
 import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
-import {BloggersType} from "../model/Blogger";
 import {errorsType} from "../types/types";
 
 export const BloggersRouter = Router({})
@@ -26,7 +25,8 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
         )
     }
 
-    if (nameBodyParams.length > 15 || nameBodyParams.length < 2) {
+
+    if (nameBodyParams && nameBodyParams.length < 15  && nameBodyParams.length > 2) {
         errors.push(
             {
                 "message": "Title length should be from 3 to 40 symbols",

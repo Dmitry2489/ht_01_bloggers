@@ -1,12 +1,15 @@
 import {Request, Response, Router} from "express";
 import {posts, PostsType} from "../model/Posts";
 import {bloggers} from "../model/Blogger";
+import {postsRepository} from "../repositories/posts-repository";
+
 
 
 export const PostsRouter = Router({})
 
 PostsRouter.get('/', (req: Request, res: Response) => {
-    res.status(200).send(posts)
+    const allPosts = postsRepository.allPosts()
+    res.status(200).send(allPosts)
 })
 
 PostsRouter.post('/', (req: Request, res: Response) => {
@@ -93,9 +96,9 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    const  findBlogger = bloggers.find(b => b.id === bloggerIdPost)
+    const  newPost = postsRepository.createPosts(titlePost, shortDescriptionPost, contentPost, bloggerIdPost )
 
-    if(!findBlogger) {
+    if(!newPost) {
         res.status(400).json(
             {
                 "errorsMessages": [
@@ -109,16 +112,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    const newPost = {
-        id: +(new Date()),
-        title: titlePost,
-        shortDescription: shortDescriptionPost,
-        content: contentPost,
-        bloggerId: bloggerIdPost,
-        bloggerName: findBlogger.name
-    }
-
-    posts.push(<PostsType>newPost)
     res.status(201).send(newPost)
     return;
 })
@@ -264,15 +257,6 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
     console.log(id)
 
     if(isNaN(id)) {
-        res.sendStatus(404)
-    }
-
-    // const indexBlogger = bloggersRepository.deleteBlogger(id)
-
-    const indexPost: number = posts.findIndex(p => p.id === id)
-
-
-    if (indexPost === -1){
         res.status(404).json({
                 "errorsMessages": [
                     {
@@ -283,8 +267,23 @@ PostsRouter.delete('/:id', (req: Request, res: Response) => {
             }
         )
         return;
-    } else  {
-        posts.splice(indexPost, 1)
+    }
+
+    const indexPost = postsRepository.deletePosts(id)
+
+    if (!indexPost) {
+        res.status(404).json({
+                "errorsMessages": [
+                    {
+                        "message": "id is required",
+                        "field": "id"
+                    }
+                ]
+            }
+        )
+        return;
+    } else {
         res.sendStatus(204)
+        return;
     }
 })
