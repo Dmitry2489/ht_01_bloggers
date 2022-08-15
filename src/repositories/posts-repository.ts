@@ -23,7 +23,8 @@ export const postsRepository = {
         }
 
         posts.push(<PostsType>newPost)
-        return false;
+        console.log(newPost)
+        return newPost;
 
     },
     deletePosts(id: number){
