@@ -5,7 +5,7 @@ export const postsRepository = {
     allPosts(){
         return posts;
     },
-    createPosts(titlePost: string, shortDescriptionPost: string, contentPost: string, bloggerIdPost: number){
+    createPost(titlePost: string, shortDescriptionPost: string, contentPost: string, bloggerIdPost: number){
 
         const  findBlogger = bloggers.find(b => b.id === bloggerIdPost)
 

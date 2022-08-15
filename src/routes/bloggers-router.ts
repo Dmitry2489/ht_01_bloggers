@@ -26,7 +26,7 @@ BloggersRouter.post('/', (req: Request, res: Response) => {
     }
 
 
-    if (nameBodyParams && nameBodyParams.length < 15  && nameBodyParams.length > 2) {
+    if (nameBodyParams && nameBodyParams.length > 15 ) {
         errors.push(
             {
                 "message": "Title length should be from 3 to 40 symbols",

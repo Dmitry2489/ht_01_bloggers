@@ -96,7 +96,7 @@ PostsRouter.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    const  newPost = postsRepository.createPosts(titlePost, shortDescriptionPost, contentPost, bloggerIdPost )
+    const  newPost = postsRepository.createPost(titlePost, shortDescriptionPost, contentPost, bloggerIdPost )
 
     if(!newPost) {
         res.status(400).json(
