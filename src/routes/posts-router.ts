@@ -118,7 +118,6 @@ PostsRouter.post('/', (req: Request, res: Response) => {
 
 PostsRouter.get('/:postId', (req: Request, res: Response) => {
     const id = +req.params.postId
-    const findPosts = posts.find(p => p.id === id)
 
     if(isNaN(id)) {
         res.status(400).json({
@@ -132,6 +131,8 @@ PostsRouter.get('/:postId', (req: Request, res: Response) => {
         )
         return;
     }
+
+    const findPosts = postsRepository.findByIdPosts(id)
 
     if(!findPosts) {
         res.sendStatus(404)

@@ -1,5 +1,4 @@
 import {posts, PostsType} from "../model/Posts";
-import {bloggers} from "../model/Blogger";
 
 export const postsRepository = {
     allPosts(){
@@ -26,6 +25,11 @@ export const postsRepository = {
         console.log(newPost)
         return newPost;
 
+    },
+    findByIdPosts(id: number) {
+        const findPosts = posts.find(p => p.id === id)
+
+        return findPosts;
     },
     deletePosts(id: number){
         const  indexPost = posts.findIndex(p => p.id === id)
